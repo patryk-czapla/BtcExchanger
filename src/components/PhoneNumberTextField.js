@@ -29,15 +29,15 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const AccountTextField = ({account_number, onChanegeFnc}) => {
+const PhoneNumberTextField = ({phone_number, onChanegeFnc}) => {
   
   const classes = useStyles()
 
   return (
     <ValidationTextField
-      id="account-number"
-      label="Account number"
-      value={account_number}
+      id="phone-number"
+      label="Phone number"
+      value={phone_number}
       onChange={(e)=>onChanegeFnc(e.target.value)}
       className={classes.textField}
       InputLabelProps={{
@@ -49,4 +49,4 @@ const AccountTextField = ({account_number, onChanegeFnc}) => {
   )
 }
 
-export default AccountTextField
+export default PhoneNumberTextField

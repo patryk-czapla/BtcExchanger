@@ -8,11 +8,13 @@ import rootReducer from './reducers'
 import './style/index.css'
 import * as serviceWorker from './serviceWorker'
 
-const middleware = [ thunk ];
+const middleware = [ thunk ]
+
 const store = createStore(
     rootReducer,
     applyMiddleware(...middleware)
 )
+
 render( 
     <Provider store={store}>
         <App />

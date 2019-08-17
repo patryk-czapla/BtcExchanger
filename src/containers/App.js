@@ -1,5 +1,5 @@
-import React from 'react';
-import '../style/App.css';
+import React from 'react'
+import '../style/App.css'
 import ExchangerContainer from './ExchangerContainer'
 
 const App = () => (

@@ -3,7 +3,7 @@ import { makeStyles, withStyles} from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 
 const ValidationTextField = withStyles({
-  root: {
+  root: {    
     '& input:valid + fieldset': {
       borderColor: 'green',
       borderWidth: 2,
@@ -29,15 +29,15 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const AccountTextField = ({account_number, onChanegeFnc}) => {
+const EmailTextField = ({email, onChanegeFnc}) => {
   
   const classes = useStyles()
 
   return (
     <ValidationTextField
-      id="account-number"
-      label="Account number"
-      value={account_number}
+      id="email"
+      label="Email"
+      value={email}
       onChange={(e)=>onChanegeFnc(e.target.value)}
       className={classes.textField}
       InputLabelProps={{
@@ -49,4 +49,4 @@ const AccountTextField = ({account_number, onChanegeFnc}) => {
   )
 }
 
-export default AccountTextField
+export default EmailTextField
