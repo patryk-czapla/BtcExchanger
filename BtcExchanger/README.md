@@ -1,4 +1,4 @@
-# dotnet_bitcoin
+# BtcExchanger
 project created for recruitment process  
 
 # Back-end do aplikacji, która sprzedaje BTC.  

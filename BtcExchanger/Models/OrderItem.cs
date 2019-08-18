@@ -1,4 +1,4 @@
-namespace dotnet_bitcoin.Models
+namespace BtcExchanger.Models
 {
     public class OrderItem
     {

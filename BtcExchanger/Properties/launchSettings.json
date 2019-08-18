@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "dotnet_bitcoin": {
+    "BtcExchanger": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/values",

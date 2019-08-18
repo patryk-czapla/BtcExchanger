@@ -11,9 +11,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using dotnet_bitcoin.Models;
+using BtcExchanger.Models;
 
-namespace dotnet_bitcoin
+namespace BtcExchanger
 {
     public class Startup
     {

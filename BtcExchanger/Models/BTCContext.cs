@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace dotnet_bitcoin.Models
+namespace BtcExchanger.Models
 {
     public class BTCContext : DbContext
     {
