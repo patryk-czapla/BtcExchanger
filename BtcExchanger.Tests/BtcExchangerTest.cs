@@ -7,7 +7,7 @@ using BtcExchanger.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Newtonsoft.Json;
-
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace BtcExchanger.Tests
@@ -55,13 +55,19 @@ namespace BtcExchanger.Tests
         }    
 
         [Fact]
-        public async Task PostReturnsCreatedForNewItem () {
+        public async Task PostReturnsCreatedForNewItemEmail () {
             var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
             var response = await _client.PostAsync ("/api/order", stringContent);
             Assert.Equal (HttpStatusCode.Created, response.StatusCode);
         }
-
+        [Fact]
+        public async Task PostReturnsCreatedForNewItemPhoneNumber () {
+            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", phone_number = "11111111" };
+            var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync ("/api/order", stringContent);
+            Assert.Equal (HttpStatusCode.Created, response.StatusCode);
+        }
         [Fact]
         public async Task PostReturnsBadRequestForEmptyItem () {
             var stringContent = new StringContent (JsonConvert.SerializeObject (null), Encoding.UTF8, "application/json");
@@ -70,16 +76,87 @@ namespace BtcExchanger.Tests
         }
 
         [Fact]
+        public async Task PostReturnsBadRequestForBtcBelowZero () {
+            var item = new OrderItem { btc_quantity = -0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
+            var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync ("/api/order", stringContent);
+            Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
+            string responseBody = await response.Content.ReadAsStringAsync();
+            JObject json = JObject.Parse(responseBody);
+            Assert.Equal ("Value for btc_quantity must be > 0.", json["errors"]["btc_quantity"][0]);
+        }
+
+        [Fact]
+        public async Task PostReturnsBadRequestForWrongAccountNumber () {
+            var item = new OrderItem { btc_quantity = 0.0001, account_number = "a0000000000000000000000", email = "batman@gotham.city" };
+            var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync ("/api/order", stringContent);
+            Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
+            string responseBody = await response.Content.ReadAsStringAsync();
+            JObject json = JObject.Parse(responseBody);
+            Assert.Equal ("The account_number field is not a valid credit card number.", json["errors"]["account_number"][0]);
+        }
+
+        [Fact]
+        public async Task PostReturnsBadRequestForEmptyAccountNumber () {
+            var item = new OrderItem { btc_quantity = 0.0001, email = "batman@gotham.city" };
+            var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync ("/api/order", stringContent);
+            Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
+            string responseBody = await response.Content.ReadAsStringAsync();
+            JObject json = JObject.Parse(responseBody);
+            Assert.Equal ("The account_number field is required.", json["errors"]["account_number"][0]);
+        }
+
+        [Fact]
+        public async Task PostReturnsBadRequestForWrongEmail () {
+            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman" };
+            var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync ("/api/order", stringContent);
+            Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
+            string responseBody = await response.Content.ReadAsStringAsync();
+            JObject json = JObject.Parse(responseBody);
+            Assert.Equal ("The email field is not a valid e-mail address.", json["errors"]["email"][0]);
+        }
+        [Fact]
+        public async Task PostReturnsBadRequestForEmptyEmailAndEmptyPhone () {
+            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000" };
+            var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync ("/api/order", stringContent);
+            Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
+            string responseBody = await response.Content.ReadAsStringAsync();
+            JObject json = JObject.Parse(responseBody);
+            Assert.Equal ("One contact method should be specified.", json["errors"]["contact"][0]);
+        }
+        [Fact]
+        public async Task PostReturnsBadRequestForBothEmailAndPhoneNumberSpecified () {
+            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city",phone_number = "111111111"};
+            var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync ("/api/order", stringContent);
+            Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
+            string responseBody = await response.Content.ReadAsStringAsync();
+            JObject json = JObject.Parse(responseBody);
+            Assert.Equal ("One contact method should be specified.", json["errors"]["contact"][0]);
+        }
+        [Fact]
+        public async Task PostReturnsBadRequestForWrongPhoneNumber () {
+            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", phone_number = "a111111111"};
+            var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync ("/api/order", stringContent);
+            Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
+            string responseBody = await response.Content.ReadAsStringAsync();
+            JObject json = JObject.Parse(responseBody);
+            Assert.Equal ("The phone_number field is not a valid phone number.", json["errors"]["phone_number"][0]);
+        }
+        [Fact]
         public async Task PostReturnsCorrectCreatedItem () {
             var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
             var response = await _client.PostAsync ("/api/order", stringContent);
-
             var stringItem = await response.Content.ReadAsStringAsync ();
             var item2 = JsonConvert.DeserializeObject<OrderItem> (stringItem);
             Assert.True ( OrderItemComparer (item, item2));
         }
-
 
         [Fact]
         public async Task PutReturnsBadRequestForInvalidItem () {

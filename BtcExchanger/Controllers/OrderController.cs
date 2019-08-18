@@ -42,6 +42,10 @@ namespace BtcExchanger.Controllers
         [HttpPost]
         public async Task<ActionResult<OrderItem>> PostOrderItem(OrderItem item)
         {
+            if ((item.email == null && item.phone_number == null)||(item.email != null && item.phone_number != null))
+            {
+                return BadRequest("{errors:{contact:[\"One contact method should be specified.\"]}}");
+            }
             _context.OrderItems.Add(item);
             await _context.SaveChangesAsync();
 
@@ -52,6 +56,11 @@ namespace BtcExchanger.Controllers
         [HttpPut ("{id}")]
         public async Task<IActionResult> Put (int id, OrderItem item) {
             
+            if ((item.email == null && item.phone_number == null) || (item.email != null && item.phone_number != null))
+            {
+                return BadRequest("{errors:{contact:[\"One contact method should be specified.\"]}}");
+            }
+
             _context.Entry(item).State = EntityState.Modified;
 
             try
