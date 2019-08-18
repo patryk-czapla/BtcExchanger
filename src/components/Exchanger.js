@@ -14,6 +14,8 @@ import ContactSwitch from '../components/ContactSwitch'
 import EmailTextField from '../components/EmailTextField'
 import PhoneNumberTextField from '../components/PhoneNumberTextField'
 
+import API from '../api/order'
+
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
@@ -57,12 +59,19 @@ const Exchanger = ({
             <h1>BTC Exchanger</h1>
             <form onSubmit={e => {
                 e.preventDefault()
+                API.postOrder({
+                    btc_quantity,
+                    account_number,
+                    contact_by_email,
+                    email,
+                    phone_number, 
+                })
                 console.log({
                     "values.btc_quantity": btc_quantity,
                     "values.account_number": account_number,
                     "values.contact_by_email": contact_by_email,
                     "values.email": email,
-                    "values.phone_number": phone_number,                    
+                    "values.phone_number": phone_number,                
                 })                               
             }}>
             <Paper className={classes.paper}>
