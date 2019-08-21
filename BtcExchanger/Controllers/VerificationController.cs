@@ -7,6 +7,7 @@ using BtcExchanger.Models;
 using System.Dynamic;
 namespace BtcExchanger.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class VerificationController : ControllerBase
@@ -18,7 +19,24 @@ namespace BtcExchanger.Controllers
             _context = context;
         }
                         
-        // POST: api/verification
+        /// <summary>
+        /// Delivers a verification of contact.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     PUT /verification
+        ///     {
+        ///        "order_Id": 1,
+        ///        "verification_code": "some code",
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="item"></param>
+        /// <returns>Updated item with wallet field</returns>
+        /// <response code="201">Returns the updated item with wallet field</response>
+        /// <response code="404">If there is no order with a specified id</response>
+        /// <response code="400">If code is invalid or it was verificated earlier</response>
         [HttpPut]
         public async Task<IActionResult> Put (VerificationItem item) {
             
@@ -47,7 +65,7 @@ namespace BtcExchanger.Controllers
                 return Ok(orderItem);                
             }
         }
-        public dynamic GenerateAnErrorMessag(string errorClass, string errorMessage){
+        private dynamic GenerateAnErrorMessag(string errorClass, string errorMessage){
             
             dynamic error_message = new ExpandoObject();
             var dictionary_second = (IDictionary<string, object>)error_message;

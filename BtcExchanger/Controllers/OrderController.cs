@@ -8,6 +8,7 @@ using System;
 
 namespace BtcExchanger.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
@@ -19,7 +20,9 @@ namespace BtcExchanger.Controllers
         {
             _context = context;
         }
-        // GET: api/order
+        /// <summary>
+        /// Get full list of transactions.
+        /// </summary> 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderItem>>> GetOrderItems()
         {
@@ -40,7 +43,31 @@ namespace BtcExchanger.Controllers
             return orderItem;
         }
         
-        // POST: api/order
+        /// <summary>
+        /// Create a new order.
+        /// </summary>
+        /// <remarks>
+        /// Sample requests:
+        ///
+        ///     POST /order
+        ///     {
+        ///         btc_quantity = 0.00001
+        ///         account_number = "0000000000000000"
+        ///         email = "batman@gotham.ct"         
+        ///     }
+        ///
+        ///     POST /order
+        ///     {
+        ///         btc_quantity = 0.00001
+        ///         account_number = "0000000000000000"
+        ///         phone_number = 777777777         
+        ///     }
+        ///        
+        /// </remarks>
+        /// <param name="item"></param>
+        /// <returns>Created a new item</returns>
+        /// <response code="201">Returns the created item</response>
+        /// <response code="400">If some datum is incorect</response>
         [HttpPost]
         public async Task<ActionResult<OrderItem>> PostOrderItem(OrderItem item)
         {
@@ -116,8 +143,8 @@ namespace BtcExchanger.Controllers
         {
             return _context.OrderItems.Any(e => e.Id == id);
         }
-        
-        public static string RandomString(int length)
+
+        private static string RandomString(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
