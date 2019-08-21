@@ -16,6 +16,8 @@ namespace BtcExchanger.Models
         public string email { get; set; }
         [PhoneAttribute]
         public string phone_number { get; set; }
+        [PhoneAttribute]
+        public string wallet { get; set; }
         
     }
 }

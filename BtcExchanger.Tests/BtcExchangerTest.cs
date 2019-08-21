@@ -221,7 +221,7 @@ namespace BtcExchanger.Tests
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
             var response = await _client.PostAsync ("/api/order", stringContent);
             response = await _client.DeleteAsync ("/api/order/1");
-            response=await _client.GetAsync("/api/order/1");
+            response = await _client.GetAsync("/api/order/1");
             Assert.Equal (HttpStatusCode.NotFound, response.StatusCode);
         }
 

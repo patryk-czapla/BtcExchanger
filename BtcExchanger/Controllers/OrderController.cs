@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BtcExchanger.Models;
+using System;
 
 namespace BtcExchanger.Controllers
 {
@@ -12,6 +13,7 @@ namespace BtcExchanger.Controllers
     public class OrderController : ControllerBase
     {
         private readonly BTCContext _context;
+        private static Random random = new Random();
 
         public OrderController(BTCContext context)
         {
@@ -47,11 +49,23 @@ namespace BtcExchanger.Controllers
                 return BadRequest("{errors:{contact:[\"One contact method should be specified.\"]}}");
             }
             _context.OrderItems.Add(item);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(); 
+
+            //mock for tests
+            var vitem = new VerificationItem { order_Id = item.Id, verification_code = "1234", verified = false };
+
+            //for deployment
+            //var vitem = new VerificationItem{ order_Id = item.Id, verification_code = RandomString(10), verified = false };
+
+            _context.VerificationItems.Add(vitem);
+            await _context.SaveChangesAsync(); 
+
+            //for deployment
+            //generate an email or send an SMS
 
             return CreatedAtAction(nameof(GetOrderItem), new { id = item.Id }, item);
         }
-
+        
         // PUT api/order/5
         [HttpPut ("{id}")]
         public async Task<IActionResult> Put (int id, OrderItem item) {
@@ -97,9 +111,17 @@ namespace BtcExchanger.Controllers
 
             return orderItem;
         }
+       
         private bool OrderItemExists(long id)
         {
             return _context.OrderItems.Any(e => e.Id == id);
+        }
+        
+        public static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+            .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
     }

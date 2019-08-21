@@ -10,5 +10,6 @@ namespace BtcExchanger.Models
         }
 
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<VerificationItem> VerificationItems { get; set; }
     }
 }
