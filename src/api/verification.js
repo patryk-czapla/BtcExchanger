@@ -8,7 +8,7 @@ export default {
         pushSummary
     }) => {
         let data = {
-            'order_Id': id,
+            'TransactionId': id,
             'verification_code': verification_code
         }
         axios.put('http://localhost:5000/api/verification', data)

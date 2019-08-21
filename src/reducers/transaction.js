@@ -10,7 +10,7 @@ const initialState = {
   error_message: {}
 }
 
-const order = (state = initialState, action) => {
+const transaction = (state = initialState, action) => {
   switch (action.type) { 
     case 'UPDATE_ID':
       return {
@@ -65,4 +65,4 @@ export const getPhoneNumber = (state) => state.phone_number
 export const getErrorMessage = (state) => state.error_message
 export const getWallet = (state) => state.wallet
 
-export default order
+export default transaction

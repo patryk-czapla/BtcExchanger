@@ -1,7 +1,7 @@
 import { push, goBack,replace } from 'connected-react-router'
-import { updateIdAction, updateErrorMessageAction, updateWallet } from './order'
+import { updateIdAction, updateErrorMessageAction, updateWallet } from './transaction'
 import { updateVerificationErrorMessageAction, updateVerificationCode } from './verification'
-export * from './order'
+export * from './transaction'
 export * from './verification'
 
 

@@ -11,7 +11,7 @@ export default {
         pushVerification
         }) => {
     
-        let order = contact_by_email ? {
+        let transaction = contact_by_email ? {
             "btc_quantity": btc_quantity,
             "account_number": account_number,
             "email": email, 
@@ -21,7 +21,7 @@ export default {
             "phone_number": phone_number
         }
         
-        axios.post('http://localhost:5000/api/order', order)
+        axios.post('http://localhost:5000/api/transaction', transaction)
         .then(function (response) {
             pushVerification(response.data.id)
             //console.log(response.data.id)

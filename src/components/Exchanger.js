@@ -14,7 +14,7 @@ import ContactSwitch from '../components/ContactSwitch'
 import EmailTextField from '../components/EmailTextField'
 import PhoneNumberTextField from '../components/PhoneNumberTextField'
 
-import API from '../api/order'
+import API from '../api/transaction'
 
 const useStyles = makeStyles(theme => ({
     root: {
