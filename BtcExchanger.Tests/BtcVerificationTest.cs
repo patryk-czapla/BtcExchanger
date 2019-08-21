@@ -23,41 +23,63 @@ namespace BtcExchanger.Tests
         }
 
         [Fact]
-        public async Task CreateOrderAndVerifyCode() {
+        public async Task CreateTransactionAndVerifyCode() {
             // Act
-            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync ("/api/order", stringContent);
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
             // Assert
             Assert.Equal (HttpStatusCode.Created, response.StatusCode);
             // Act
-            var verificationItem = new VerificationItem {order_Id = 1 , verification_code = "1234"};
+            var verificationItem = new Verification {TransactionId = 1 , verification_code = "1234"};
             stringContent = new StringContent (JsonConvert.SerializeObject (verificationItem), Encoding.UTF8, "application/json");
             response = await _client.PutAsync("/api/verification",stringContent); 
             // Assert          
             Assert.Equal (HttpStatusCode.OK, response.StatusCode);
         }
-
         [Fact]
-        public async Task PutReturnsNoContentForItemNotFound() {
+        public async Task PutReturnsBadRequestForEmptyVerificationCode() {
             // Act
-            var verificationItem = new VerificationItem {order_Id = 1 , verification_code = "1234"};
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
+            var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
+            // Assert
+            Assert.Equal (HttpStatusCode.Created, response.StatusCode);
+            // Act
+            var verificationItem = new Verification {TransactionId = 1 };
+            stringContent = new StringContent (JsonConvert.SerializeObject (verificationItem), Encoding.UTF8, "application/json");
+            response = await _client.PutAsync("/api/verification",stringContent); 
+            // Assert          
+            Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
+        }
+        [Fact]
+        public async Task PutReturnsNotFoundForItemNotFound() {
+            // Act
+            var verificationItem = new Verification {TransactionId = 1 , verification_code = "1234"};
             var stringContent = new StringContent (JsonConvert.SerializeObject (verificationItem), Encoding.UTF8, "application/json");
             var response = await _client.PutAsync("/api/verification",stringContent); 
             // Assert          
             Assert.Equal (HttpStatusCode.NotFound, response.StatusCode);
         }
-
+        [Fact]
+        public async Task PutReturnsNotFoundForEmptyTransactionId() {
+            // Act
+            var verificationItem = new Verification {verification_code = "1234"};
+            var stringContent = new StringContent (JsonConvert.SerializeObject (verificationItem), Encoding.UTF8, "application/json");
+            var response = await _client.PutAsync("/api/verification",stringContent); 
+            // Assert          
+            Assert.Equal (HttpStatusCode.NotFound, response.StatusCode);
+        }
         [Fact]
         public async Task PutReturnsBadRequestForWrongVerifactionCode() {
             // Act
-            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync ("/api/order", stringContent);
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
             // Assert
             Assert.Equal (HttpStatusCode.Created, response.StatusCode);
             // Act
-            var verificationItem = new VerificationItem {order_Id = 1 , verification_code = "4321"};
+            var verificationItem = new Verification {TransactionId = 1 , verification_code = "4321"};
             stringContent = new StringContent (JsonConvert.SerializeObject (verificationItem), Encoding.UTF8, "application/json");
             response = await _client.PutAsync("/api/verification",stringContent); 
             // Assert          
@@ -67,13 +89,13 @@ namespace BtcExchanger.Tests
         [Fact]
         public async Task PutReturnsBadRequestForSecondAtemptToVerifaction() {
             // Act
-            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync ("/api/order", stringContent);
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
             // Assert
             Assert.Equal (HttpStatusCode.Created, response.StatusCode);
             // Act
-            var verificationItem = new VerificationItem {order_Id = 1 , verification_code = "1234"};
+            var verificationItem = new Verification {TransactionId = 1 , verification_code = "1234"};
             stringContent = new StringContent (JsonConvert.SerializeObject (verificationItem), Encoding.UTF8, "application/json");
             response = await _client.PutAsync("/api/verification",stringContent); 
             // Assert          

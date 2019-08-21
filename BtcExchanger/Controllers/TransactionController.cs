@@ -11,12 +11,12 @@ namespace BtcExchanger.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class TransactionController : ControllerBase
     {
         private readonly BTCContext _context;
         private static Random random = new Random();
 
-        public OrderController(BTCContext context)
+        public TransactionController(BTCContext context)
         {
             _context = context;
         }
@@ -24,39 +24,39 @@ namespace BtcExchanger.Controllers
         /// Get full list of transactions.
         /// </summary> 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderItem>>> GetOrderItems()
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionItems()
         {
-            return await _context.OrderItems.ToListAsync();
+            return await _context.TransactionItems.ToListAsync();
         }
 
-        // GET: api/order/5
-        [HttpGet("{id}", Name = "GetOrderItem")]
-        public async Task<ActionResult<OrderItem>> GetOrderItem(long id)
+        // GET: api/transaction/5
+        [HttpGet("{id}", Name = "GetTransaction")]
+        public async Task<ActionResult<Transaction>> GetTransaction(long id)
         {
-            var orderItem = await _context.OrderItems.FindAsync(id);
+            var transactionItem = await _context.TransactionItems.FindAsync(id);
 
-            if (orderItem == null)
+            if (transactionItem == null)
             {
                 return NotFound();
             }
 
-            return orderItem;
+            return transactionItem;
         }
         
         /// <summary>
-        /// Create a new order.
+        /// Create a new transaction.
         /// </summary>
         /// <remarks>
         /// Sample requests:
         ///
-        ///     POST /order
+        ///     POST /transaction
         ///     {
         ///         btc_quantity = 0.00001
         ///         account_number = "0000000000000000"
         ///         email = "batman@gotham.ct"         
         ///     }
         ///
-        ///     POST /order
+        ///     POST /transaction
         ///     {
         ///         btc_quantity = 0.00001
         ///         account_number = "0000000000000000"
@@ -69,20 +69,20 @@ namespace BtcExchanger.Controllers
         /// <response code="201">Returns the created item</response>
         /// <response code="400">If some datum is incorect</response>
         [HttpPost]
-        public async Task<ActionResult<OrderItem>> PostOrderItem(OrderItem item)
+        public async Task<ActionResult<Transaction>> PostTransactionItem(Transaction item)
         {
             if ((item.email == null && item.phone_number == null)||(item.email != null && item.phone_number != null))
             {
-                return BadRequest("{errors:{contact:[\"One contact method should be specified.\"]}}");
+                
+                return BadRequest(ErrorHelper.GenerateAnErrorMessag("contact","One contact method should be specified."));
             }
-            _context.OrderItems.Add(item);
+            _context.TransactionItems.Add(item);
             await _context.SaveChangesAsync(); 
-
             //mock for tests
-            var vitem = new VerificationItem { order_Id = item.Id, verification_code = "1234", verified = false };
+            var vitem = new Verification {  TransactionId = item.Id, verification_code = "1234", verified = false };
 
             //for deployment
-            //var vitem = new VerificationItem{ order_Id = item.Id, verification_code = RandomString(10), verified = false };
+            //var vitem = new VerificationItem{ Id = item.Id, verification_code = RandomString(10), verified = false };
 
             _context.VerificationItems.Add(vitem);
             await _context.SaveChangesAsync(); 
@@ -90,16 +90,16 @@ namespace BtcExchanger.Controllers
             //for deployment
             //generate an email or send an SMS
 
-            return CreatedAtAction(nameof(GetOrderItem), new { id = item.Id }, item);
+            return CreatedAtAction(nameof(GetTransaction), new { id = item.Id }, item);
         }
         
-        // PUT api/order/5
+        // PUT api/transaction/5
         [HttpPut ("{id}")]
-        public async Task<IActionResult> Put (int id, OrderItem item) {
+        public async Task<IActionResult> Put (int id, Transaction item) {
             
             if ((item.email == null && item.phone_number == null) || (item.email != null && item.phone_number != null))
             {
-                return BadRequest("{errors:{contact:[\"One contact method should be specified.\"]}}");
+                return BadRequest(ErrorHelper.GenerateAnErrorMessag("contact","One contact method should be specified."));
             }
 
             _context.Entry(item).State = EntityState.Modified;
@@ -110,7 +110,7 @@ namespace BtcExchanger.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!OrderItemExists(id))
+                if (!TransactionItemExists(id))
                 {
                     return NotFound();
                 }
@@ -125,23 +125,23 @@ namespace BtcExchanger.Controllers
 
         // DELETE api/cinema/5
         [HttpDelete ("{id}")]
-        public async Task<ActionResult<OrderItem>> Delete (long id) {
+        public async Task<ActionResult<Transaction>> Delete (long id) {
 
-            var orderItem = await _context.OrderItems.FindAsync(id);
-            if (orderItem == null)
+            var transactionItem = await _context.TransactionItems.FindAsync(id);
+            if (transactionItem == null)
             {
                 return NotFound();
             }
-            _context.OrderItems.Remove (orderItem);
+            _context.TransactionItems.Remove (transactionItem);
 
             await _context.SaveChangesAsync();
 
-            return orderItem;
+            return transactionItem;
         }
        
-        private bool OrderItemExists(long id)
+        private bool TransactionItemExists(long id)
         {
-            return _context.OrderItems.Any(e => e.Id == id);
+            return _context.TransactionItems.Any(e => e.Id == id);
         }
 
         private static string RandomString(int length)
@@ -150,6 +150,7 @@ namespace BtcExchanger.Controllers
             return new string(Enumerable.Repeat(chars, length)
             .Select(s => s[random.Next(s.Length)]).ToArray());
         }
+        
 
     }
 }

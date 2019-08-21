@@ -7,9 +7,8 @@ namespace BtcExchanger.Models
         public BTCContext(DbContextOptions<BTCContext> options)
             : base(options)
         {
-        }
-
-        public DbSet<OrderItem> OrderItems { get; set; }
-        public DbSet<VerificationItem> VerificationItems { get; set; }
+        }      
+        public DbSet<Transaction> TransactionItems { get; set; }
+        public DbSet<Verification> VerificationItems { get; set; }
     }
 }

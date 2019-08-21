@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 namespace BtcExchanger.Models
 {
-    public class OrderItem
+    public class Transaction
     {
         public long Id { get; set; }
         [Required]

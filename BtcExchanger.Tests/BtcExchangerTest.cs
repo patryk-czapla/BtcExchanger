@@ -25,61 +25,61 @@ namespace BtcExchanger.Tests
         [Fact]
         public async Task GetReturnsNotFoundForMissingIdValue () {
             // Act
-            var response = await _client.GetAsync ("/api/order/1");
+            var response = await _client.GetAsync ("/api/transaction/1");
             // Assert
             Assert.Equal (HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]
         public async Task GetReturnsOkForCorrectIdValue () {
-            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            await _client.PostAsync ("/api/order", stringContent);
+            await _client.PostAsync ("/api/transaction", stringContent);
             // Act
-            var response = await _client.GetAsync ("/api/order/1");
+            var response = await _client.GetAsync ("/api/transaction/1");
             // Assert
             Assert.Equal (HttpStatusCode.OK, response.StatusCode);
         }
 
         [Fact]
         public async Task GetReturnsCorectObject () {
-            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            await _client.PostAsync ("/api/order", stringContent);
+            await _client.PostAsync ("/api/transaction", stringContent);
             // Act
-            var response = await _client.GetAsync ("/api/order/1");
+            var response = await _client.GetAsync ("/api/transaction/1");
 
             var stringItem = await response.Content.ReadAsStringAsync ();
-            var item2 = JsonConvert.DeserializeObject<OrderItem> (stringItem);
-            Assert.True ( OrderItemComparer (item, item2));
+            var item2 = JsonConvert.DeserializeObject<Transaction> (stringItem);
+            Assert.True ( TransactionItemComparer (item, item2));
         }    
 
         [Fact]
         public async Task PostReturnsCreatedForNewItemEmail () {
-            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync ("/api/order", stringContent);
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
             Assert.Equal (HttpStatusCode.Created, response.StatusCode);
         }
         [Fact]
         public async Task PostReturnsCreatedForNewItemPhoneNumber () {
-            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", phone_number = "11111111" };
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", phone_number = "11111111" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync ("/api/order", stringContent);
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
             Assert.Equal (HttpStatusCode.Created, response.StatusCode);
         }
         [Fact]
         public async Task PostReturnsBadRequestForEmptyItem () {
             var stringContent = new StringContent (JsonConvert.SerializeObject (null), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync ("/api/order", stringContent);
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
             Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
         public async Task PostReturnsBadRequestForBtcBelowZero () {
-            var item = new OrderItem { btc_quantity = -0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
+            var item = new Transaction { btc_quantity = -0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync ("/api/order", stringContent);
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
             Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
             string responseBody = await response.Content.ReadAsStringAsync();
             JObject json = JObject.Parse(responseBody);
@@ -88,9 +88,9 @@ namespace BtcExchanger.Tests
 
         [Fact]
         public async Task PostReturnsBadRequestForWrongAccountNumber () {
-            var item = new OrderItem { btc_quantity = 0.0001, account_number = "a0000000000000000000000", email = "batman@gotham.city" };
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "a0000000000000000000000", email = "batman@gotham.city" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync ("/api/order", stringContent);
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
             Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
             string responseBody = await response.Content.ReadAsStringAsync();
             JObject json = JObject.Parse(responseBody);
@@ -99,9 +99,9 @@ namespace BtcExchanger.Tests
 
         [Fact]
         public async Task PostReturnsBadRequestForEmptyAccountNumber () {
-            var item = new OrderItem { btc_quantity = 0.0001, email = "batman@gotham.city" };
+            var item = new Transaction { btc_quantity = 0.0001, email = "batman@gotham.city" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync ("/api/order", stringContent);
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
             Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
             string responseBody = await response.Content.ReadAsStringAsync();
             JObject json = JObject.Parse(responseBody);
@@ -110,9 +110,9 @@ namespace BtcExchanger.Tests
 
         [Fact]
         public async Task PostReturnsBadRequestForWrongEmail () {
-            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman" };
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync ("/api/order", stringContent);
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
             Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
             string responseBody = await response.Content.ReadAsStringAsync();
             JObject json = JObject.Parse(responseBody);
@@ -120,29 +120,29 @@ namespace BtcExchanger.Tests
         }
         [Fact]
         public async Task PostReturnsBadRequestForEmptyEmailAndEmptyPhone () {
-            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000" };
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync ("/api/order", stringContent);
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
             Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
             string responseBody = await response.Content.ReadAsStringAsync();
             JObject json = JObject.Parse(responseBody);
-            Assert.Equal ("One contact method should be specified.", json["errors"]["contact"][0]);
+            Assert.Equal ("One contact method should be specified.", json["errors"]["contact"]);
         }
         [Fact]
         public async Task PostReturnsBadRequestForBothEmailAndPhoneNumberSpecified () {
-            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city",phone_number = "111111111"};
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city",phone_number = "111111111"};
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync ("/api/order", stringContent);
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
             Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
             string responseBody = await response.Content.ReadAsStringAsync();
             JObject json = JObject.Parse(responseBody);
-            Assert.Equal ("One contact method should be specified.", json["errors"]["contact"][0]);
+            Assert.Equal ("One contact method should be specified.", json["errors"]["contact"]);
         }
         [Fact]
         public async Task PostReturnsBadRequestForWrongPhoneNumber () {
-            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", phone_number = "a111111111"};
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", phone_number = "a111111111"};
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync ("/api/order", stringContent);
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
             Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
             string responseBody = await response.Content.ReadAsStringAsync();
             JObject json = JObject.Parse(responseBody);
@@ -150,82 +150,82 @@ namespace BtcExchanger.Tests
         }
         [Fact]
         public async Task PostReturnsCorrectCreatedItem () {
-            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync ("/api/order", stringContent);
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
             var stringItem = await response.Content.ReadAsStringAsync ();
-            var item2 = JsonConvert.DeserializeObject<OrderItem> (stringItem);
-            Assert.True ( OrderItemComparer (item, item2));
+            var item2 = JsonConvert.DeserializeObject<Transaction> (stringItem);
+            Assert.True ( TransactionItemComparer (item, item2));
         }
 
         [Fact]
         public async Task PutReturnsBadRequestForInvalidItem () {
             var stringContent = new StringContent (JsonConvert.SerializeObject (null), Encoding.UTF8, "application/json");
-            var response = await _client.PutAsync ("/api/order/1", stringContent);
+            var response = await _client.PutAsync ("/api/transaction/1", stringContent);
             Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
         public async Task PutReturnsNoContentForItemNotFound () {
-            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            var response = await _client.PutAsync ("/api/order/1", stringContent);
+            var response = await _client.PutAsync ("/api/transaction/1", stringContent);
             Assert.Equal (HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]
         public async Task PutReturnsOkForCorrectUpdatedItem () {
-            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync ("/api/order", stringContent);
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
             item.btc_quantity = 1.0;
             item.Id = 1;
             stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            response = await _client.PutAsync ("/api/order/1", stringContent);
+            response = await _client.PutAsync ("/api/transaction/1", stringContent);
             Assert.Equal (HttpStatusCode.OK, response.StatusCode);
         }
         
         [Fact]
         public async Task PutReturnsCorrectUpdatedItem () {
-            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync ("/api/order", stringContent);
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
             item.btc_quantity = 1.0;
             item.Id = 1;
             stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            response = await _client.PutAsync ("/api/order/1", stringContent);
+            response = await _client.PutAsync ("/api/transaction/1", stringContent);
 
             var stringItem = await response.Content.ReadAsStringAsync ();
-            var item2 = JsonConvert.DeserializeObject<OrderItem> (stringItem);
-            Assert.True ( OrderItemComparer (item, item2));
+            var item2 = JsonConvert.DeserializeObject<Transaction> (stringItem);
+            Assert.True ( TransactionItemComparer (item, item2));
         }
 
         [Fact]
         public async Task DeleteReturnsNotFoundForNonExistingItem () {
-            var response = await _client.DeleteAsync ("/api/order/1");
+            var response = await _client.DeleteAsync ("/api/transaction/1");
             Assert.Equal (HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]
         public async Task DeleteReturnsOkForCorrectDeletedItem () {
-            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync ("/api/order", stringContent);
-            response = await _client.DeleteAsync ("/api/order/1");
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
+            response = await _client.DeleteAsync ("/api/transaction/1");
             Assert.Equal (HttpStatusCode.OK, response.StatusCode);
         }
 
         [Fact]
         public async Task DeleteCorrectDeletsItem () {
-            var item = new OrderItem { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
             var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync ("/api/order", stringContent);
-            response = await _client.DeleteAsync ("/api/order/1");
-            response = await _client.GetAsync("/api/order/1");
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
+            response = await _client.DeleteAsync ("/api/transaction/1");
+            response = await _client.GetAsync("/api/transaction/1");
             Assert.Equal (HttpStatusCode.NotFound, response.StatusCode);
         }
 
-        public bool OrderItemComparer (OrderItem item, OrderItem item2) {
+        public bool TransactionItemComparer (Transaction item, Transaction item2) {
             if (
                 item.btc_quantity == item2.btc_quantity &&
                 item.account_number == item2.account_number &&
