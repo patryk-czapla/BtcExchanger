@@ -1,44 +1,35 @@
-export const updateBTCQuanity = btc_quantity => (dispatch) => {
-  dispatch(updateBTCQuanityAction(btc_quantity))
+import { push, goBack,replace } from 'connected-react-router'
+import { updateIdAction, updateErrorMessageAction, updateWallet } from './order'
+import { updateVerificationErrorMessageAction, updateVerificationCode } from './verification'
+export * from './order'
+export * from './verification'
+
+
+export const pushLoader = () => (dispatch) => {
+  dispatch(push('/loader'))
 }
 
-const updateBTCQuanityAction = btc_quantity => ({
-  type: 'UPDATE_BTC_QUANTITY',
-  btc_quantity
-})
-
-export const updateAccountNumber = account_number => (dispatch) => {
-  dispatch(updateAccountNumberAction(account_number))
+export const pushVerification = (id) => (dispatch) => {
+  dispatch(updateIdAction(id))
+  dispatch(updateErrorMessageAction({}))
+  dispatch(updateVerificationErrorMessageAction({}))
+  dispatch(updateVerificationCode(''))
+  dispatch(replace('/verification'))
 }
 
-const updateAccountNumberAction = account_number => ({
-  type: 'UPDATE_ACCOUNT_NUMBER',
-  account_number
-})
-
-export const updateContactByEmail = contact_by_email => (dispatch) => {
-  dispatch(updateContactByEmailAction(contact_by_email))
+export const getBackWithError = (error_message) => (dispatch) => {
+  dispatch(updateErrorMessageAction(error_message))
+  dispatch(goBack())
 }
 
-const updateContactByEmailAction = contact_by_email => ({
-  type: 'UPDATE_CONTACT_BY_EMAIL',
-  contact_by_email
-})
-
-export const updateEmail = email => (dispatch) => {
-  dispatch(updateEmailAction(email))
+export const getBackWithVerificationError = (verification_error_message) => (dispatch) => {
+  dispatch(updateVerificationErrorMessageAction(verification_error_message))
+  dispatch(goBack())
 }
 
-const updateEmailAction = email => ({
-  type: 'UPDATE_EMAIL_NUMBER',
-  email
-})
-
-export const updatePhoneNumber = phone_number => (dispatch) => {
-  dispatch(updatePhoneNumberAction(phone_number))
+export const pushSummary = (wallet) => (dispatch) => {
+  dispatch(updateWallet(wallet))
+  dispatch(updateErrorMessageAction({}))
+  dispatch(updateVerificationErrorMessageAction({}))
+  dispatch(replace('/summary'))
 }
-
-const updatePhoneNumberAction = phone_number => ({
-  type: 'UPDATE_PHONE_NUMBER',
-  phone_number
-})

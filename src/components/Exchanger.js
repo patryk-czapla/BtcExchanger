@@ -33,7 +33,11 @@ const useStyles = makeStyles(theme => ({
     },
     centerArrow:{
         margin: '30px 20px'
+    },
+    error_message:{
+        color: 'red'
     }
+
 }))
 
 const Exchanger = ({
@@ -42,11 +46,17 @@ const Exchanger = ({
     contact_by_email, 
     email, 
     phone_number, 
+    error_message,
     updateAccountNumber, 
     updateBTCQuanity,
     updateContactByEmail, 
     updateEmail, 
-    updatePhoneNumber }) => {
+    updatePhoneNumber,
+    pushLoader,
+    getBackWithError,
+    pushVerification
+    }) => {
+        
     const classes = useStyles()
     React.useEffect(() => {
         loadCSS(
@@ -56,23 +66,34 @@ const Exchanger = ({
       }, [])
     return (
         <div className="App-content">
-            <h1>BTC Exchanger</h1>
+            <h1>BTC Exchanger</h1>            
+            {  /*Show errors if they occur on the backend.*/
+                Object.entries(error_message).length === 0 && error_message.constructor === Object ?                 
+                ''                                    
+                : 
+                <div className="container">
+                    <h3>There where some problems with Your form, please corect:</h3>
+                    <ul className={classes.error_list}>
+                    {
+                        Object.keys(error_message).map(function(object,i) {
+                            return <li key={i} className={classes.error_message}>{error_message[object]}</li>
+                        })
+                    }
+                    </ul>
+                </div>
+            }
             <form onSubmit={e => {
                 e.preventDefault()
+                pushLoader()
                 API.postOrder({
                     btc_quantity,
                     account_number,
                     contact_by_email,
                     email,
                     phone_number, 
+                    getBackWithError,
+                    pushVerification
                 })
-                console.log({
-                    "values.btc_quantity": btc_quantity,
-                    "values.account_number": account_number,
-                    "values.contact_by_email": contact_by_email,
-                    "values.email": email,
-                    "values.phone_number": phone_number,                
-                })                               
             }}>
             <Paper className={classes.paper}>
                 <Grid container wrap="nowrap" justify="space-between">
@@ -135,8 +156,14 @@ const Exchanger = ({
                     Submit                            
                     <Icon className={classes.rightIcon}>send</Icon>
                 </Button>       
+            </Grid>  
+            <Grid container
+                direction="row"
+                justify="flex-end"
+                alignItems="center"
+                >                     
             </Grid>                                         
-            </form>       
+            </form>             
         </div>
     )
 }

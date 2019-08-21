@@ -6,8 +6,11 @@ export default {
         account_number, 
         contact_by_email, 
         email, 
-        phone_number}) => {
-            
+        phone_number,
+        getBackWithError,
+        pushVerification
+        }) => {
+    
         let order = contact_by_email ? {
             "btc_quantity": btc_quantity,
             "account_number": account_number,
@@ -20,11 +23,12 @@ export default {
         
         axios.post('http://localhost:5000/api/order', order)
         .then(function (response) {
-            console.log(response);
+            pushVerification(response.data.id)
+            //console.log(response.data.id)
         })
-        .catch(function (error) {
-            console.log(error);
+        .catch(function (error) {           
+            getBackWithError(error.response.data.errors)
+            //console.log(error)
         })
-    }
-            
+    }, 
 }
