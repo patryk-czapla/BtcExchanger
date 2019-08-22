@@ -160,7 +160,13 @@ namespace BtcExchanger.Tests
             var item2 = JsonConvert.DeserializeObject<Transaction> (stringItem);
             Assert.True ( TransactionItemComparer (item, item2));
         }   
-
+        [Fact]
+        public async Task PostReturnsBadRequestIfWalletIsProvided () {
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city", wallet = "test" };
+            var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
+            Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
+        }
         public bool TransactionItemComparer (Transaction item, Transaction item2) {
             if (
                 item.btc_quantity == item2.btc_quantity &&

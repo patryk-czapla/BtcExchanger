@@ -82,8 +82,11 @@ namespace BtcExchanger.Controllers
         {
             if ((item.email == null && item.phone_number == null)||(item.email != null && item.phone_number != null))
             {
-                
                 return BadRequest(ErrorHelper.GenerateAnErrorMessag("contact","One contact method should be specified."));
+            }
+            if ((item.wallet != null ))
+            {
+                return BadRequest(ErrorHelper.GenerateAnErrorMessag("wallet","You can't provide wallet field."));
             }
             _context.TransactionItems.Add(item);
             await _context.SaveChangesAsync(); 
