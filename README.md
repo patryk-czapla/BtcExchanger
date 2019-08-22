@@ -1,4 +1,4 @@
-# frontend_bitcoin
+# BtcExchanger
 project created for recruitment process 
 
 # Frontend do aplikacji, która sprzedaje BTC.  
