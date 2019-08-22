@@ -1,12 +1,38 @@
 # BtcExchanger
 project created for recruitment process  
 
-#  simple commands:
+#  Simple commands:
+Create .env with api path for Frontend  
+```
+cp ./BtcExchanger.Frontend/.env.example ./BtcExchanger.Frontend/.env  
+```
+Run all in docker:  
+```
+docker-compose up  
+```
+Run backend native:  
+```
+dotnet run --project BtcExchanger  
+```
+Run backend tests:  
 ```
 dotnet test  
-dotent run --project BtcExchanger  
-docker build -t aspnetapp .  
+```
+Run only backend in docker:  
+```
+docker build -t aspnetapp BtcExchanger  
 docker run -d -p 8080:80 --name myapp aspnetapp  
+```
+Run only frontend:  
+```
+cd BtcExchanger.Frontend  
+npm install  
+npm run  
+```
+Run only frontend in docker:  
+```
+sudo docker build BtcExchanger.Frontend -t react-docker  
+docker run -p 8000:80 react-docker  
 ```
 
 
