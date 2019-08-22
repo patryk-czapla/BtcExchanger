@@ -11,12 +11,12 @@ namespace BtcExchanger.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class TransactionController : ControllerBase
+    public class transactionController : ControllerBase
     {
         private readonly BTCContext _context;
         private static Random random = new Random();
 
-        public TransactionController(BTCContext context)
+        public transactionController(BTCContext context)
         {
             _context = context;
         }
@@ -98,8 +98,6 @@ namespace BtcExchanger.Controllers
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
             .Select(s => s[random.Next(s.Length)]).ToArray());
-        }
-        
-
+        }        
     }
 }

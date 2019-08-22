@@ -10,11 +10,11 @@ namespace BtcExchanger.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class VerificationController : ControllerBase
+    public class verificationController : ControllerBase
     {
         private readonly BTCContext _context;
 
-        public VerificationController(BTCContext context)
+        public verificationController(BTCContext context)
         {
             _context = context;
         }
