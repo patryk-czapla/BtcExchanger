@@ -1,6 +1,15 @@
 # BtcExchanger
 project created for recruitment process  
 
+#  simple commands:
+```
+dotnet test  
+dotent run --project BtcExchanger  
+docker build -t aspnetapp .  
+docker run -d -p 8080:80 --name myapp aspnetapp  
+```
+
+
 # Back-end do aplikacji, która sprzedaje BTC.  
 
 # Przebieg aplikacji wygląda następująco:  
