@@ -92,57 +92,6 @@ namespace BtcExchanger.Controllers
 
             return CreatedAtAction(nameof(GetTransaction), new { id = item.Id }, item);
         }
-        
-        // PUT api/transaction/5
-        [HttpPut ("{id}")]
-        public async Task<IActionResult> Put (int id, Transaction item) {
-            
-            if ((item.email == null && item.phone_number == null) || (item.email != null && item.phone_number != null))
-            {
-                return BadRequest(ErrorHelper.GenerateAnErrorMessag("contact","One contact method should be specified."));
-            }
-
-            _context.Entry(item).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TransactionItemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-             return Ok(item);
-        }
-
-        // DELETE api/cinema/5
-        [HttpDelete ("{id}")]
-        public async Task<ActionResult<Transaction>> Delete (long id) {
-
-            var transactionItem = await _context.TransactionItems.FindAsync(id);
-            if (transactionItem == null)
-            {
-                return NotFound();
-            }
-            _context.TransactionItems.Remove (transactionItem);
-
-            await _context.SaveChangesAsync();
-
-            return transactionItem;
-        }
-       
-        private bool TransactionItemExists(long id)
-        {
-            return _context.TransactionItems.Any(e => e.Id == id);
-        }
 
         private static string RandomString(int length)
         {
