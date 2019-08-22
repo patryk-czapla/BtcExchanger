@@ -20,14 +20,6 @@ namespace BtcExchanger.Controllers
         {
             _context = context;
         }
-        /// <summary>
-        /// Get full list of transactions.
-        /// </summary> 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionItems()
-        {
-            return await _context.TransactionItems.ToListAsync();
-        }
 
         /// <summary>
         /// Returns a transaction if provided data is valid.
