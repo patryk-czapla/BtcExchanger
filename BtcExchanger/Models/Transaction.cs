@@ -1,5 +1,9 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
 namespace BtcExchanger.Models
 {
     public class Transaction
@@ -17,6 +21,17 @@ namespace BtcExchanger.Models
         [PhoneAttribute]
         public string phone_number { get; set; }
         public string wallet { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Status? status { get; set; }
         
+    }
+    public enum Status
+    {
+        [EnumMember(Value = "Waiting for verification.")]
+        WAITING_FOR_VERIFICATION,
+        [EnumMember(Value = "Waiting for money transfer.")]
+        WAITING_FOR_TRANSFER,
+        [EnumMember(Value = "Transaction ended.")]
+        ENDED,
     }
 }

@@ -167,6 +167,23 @@ namespace BtcExchanger.Tests
             var response = await _client.PostAsync ("/api/transaction", stringContent);
             Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
         }
+        [Fact]
+        public async Task PostReturnsBadRequestIfStatusIsProvided () {
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city", status = Status.WAITING_FOR_TRANSFER };
+            var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
+            Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
+        }
+        [Fact]
+        public async Task PostReturnsCreatedItemWithStatusForNewItem() {
+            var item = new Transaction { btc_quantity = 0.0001, account_number = "0000000000000000000000", email = "batman@gotham.city" };
+            var stringContent = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync ("/api/transaction", stringContent);
+            Assert.Equal (HttpStatusCode.Created, response.StatusCode);
+            string responseBody = await response.Content.ReadAsStringAsync();
+            JObject json = JObject.Parse(responseBody);
+            Assert.Equal ("Waiting for verification.", json["status"]);
+        }
         public bool TransactionItemComparer (Transaction item, Transaction item2) {
             if (
                 item.btc_quantity == item2.btc_quantity &&

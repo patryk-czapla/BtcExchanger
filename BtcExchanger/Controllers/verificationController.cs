@@ -57,6 +57,7 @@ namespace BtcExchanger.Controllers
                 var transactionItem = await _context.TransactionItems.SingleOrDefaultAsync(b => b.Id == item.TransactionId);
                 //mock
                 transactionItem.wallet="btc_wallet_path";
+                transactionItem.status = Status.WAITING_FOR_TRANSFER;
 
                 await _context.SaveChangesAsync();      
 

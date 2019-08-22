@@ -88,6 +88,11 @@ namespace BtcExchanger.Controllers
             {
                 return BadRequest(ErrorHelper.GenerateAnErrorMessag("wallet","You can't provide wallet field."));
             }
+            if ((item.status != null ))
+            {
+                return BadRequest(ErrorHelper.GenerateAnErrorMessag("status","You can't provide status field."));
+            }
+            item.status = Status.WAITING_FOR_VERIFICATION;
             _context.TransactionItems.Add(item);
             await _context.SaveChangesAsync(); 
             //mock for tests
