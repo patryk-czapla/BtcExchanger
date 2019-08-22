@@ -11,7 +11,7 @@ export default {
             'TransactionId': id,
             'verification_code': verification_code
         }
-        axios.put('http://localhost:5000/api/verification', data)
+        axios.put(process.env.REACT_APP_API_URL+'/api/verification', data)
         .then(function (response) {
             pushSummary(response.data.wallet,response.data.status)
             //console.log(response)
