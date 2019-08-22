@@ -20,7 +20,7 @@ const VerificationContainer = ( {
         updateVerificationCode = { (val) =>{updateVerificationCode(val)}}
         pushLoader = { () =>{pushLoader()}}
         getBackWithVerificationError = { (val) =>{getBackWithVerificationError(val)} }
-        pushSummary = {(val)=>pushSummary(val)}
+        pushSummary = {(val,val2)=>pushSummary(val,val2)}
         />
 )
 

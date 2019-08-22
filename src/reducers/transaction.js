@@ -7,7 +7,8 @@ const initialState = {
   email: '',
   phone_number: '',
   wallet:'',
-  error_message: {}
+  error_message: {},
+  status: ''
 }
 
 const transaction = (state = initialState, action) => {
@@ -52,6 +53,11 @@ const transaction = (state = initialState, action) => {
         ...state, 
         wallet: action.wallet
       } 
+    case 'UPDATE_STATUS':
+      return {
+        ...state,
+        status: action.status
+      }
     default:
       return state
   }
@@ -64,5 +70,6 @@ export const getEmail = (state) => state.email
 export const getPhoneNumber = (state) => state.phone_number
 export const getErrorMessage = (state) => state.error_message
 export const getWallet = (state) => state.wallet
+export const getStatus = (state) => state.status
 
 export default transaction

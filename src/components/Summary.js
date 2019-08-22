@@ -33,7 +33,8 @@ const Summary = ({
     contact_by_email, 
     email, 
     phone_number, 
-    wallet
+    wallet,
+    status
     }) => {
     const classes = useStyles()
     const rows = [
@@ -42,6 +43,7 @@ const Summary = ({
         createData('Account number', account_number),
         contact_by_email ? createData('Email', email) : createData('Phone number', phone_number),
         createData('Wallet', wallet),
+        createData('Status', status)
     ];    
     return (
         <div className="App-content">

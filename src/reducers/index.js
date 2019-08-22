@@ -17,7 +17,7 @@ export const getPhoneNumber = (state) => fromTransaction.getPhoneNumber(state.tr
 export const getContactByEmail = (state) => fromTransaction.getContactByEmail(state.transaction)
 export const getErrorMessage = (state) => fromTransaction.getErrorMessage(state.transaction)
 export const getWallet = (state) => fromTransaction.getWallet(state.transaction)
-
+export const getStatus = (state) => fromTransaction.getStatus(state.transaction)
 
 export const getVerificationCode = (state) => fromVerification.getVerificationCode(state.verification)
 export const getVerificationErrorMessage = (state) => fromVerification.getVerificationErrorMessage(state.verification)

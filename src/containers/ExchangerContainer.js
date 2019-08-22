@@ -34,7 +34,7 @@ const ExchangerContainer = ( {
         updatePhoneNumber = { val => { updatePhoneNumber(val)}} 
         pushLoader = { () =>{pushLoader()}}
         getBackWithError = { (val) =>{getBackWithError(val)}}
-        pushVerification = { (val) =>{pushVerification(val)}}
+        pushVerification = { (val,val2) =>{pushVerification(val,val2)}}
         />
 )
 

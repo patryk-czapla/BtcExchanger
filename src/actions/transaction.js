@@ -12,6 +12,11 @@ export  const updateErrorMessageAction = error_message => ({
     wallet
   })
 
+  export  const updateStatus = status => ({
+    type: 'UPDATE_STATUS',
+    status
+  })
+
   export const updateId = id => (dispatch) => {
     dispatch(updateIdAction(id))
   }

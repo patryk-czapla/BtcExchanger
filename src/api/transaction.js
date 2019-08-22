@@ -23,7 +23,7 @@ export default {
         
         axios.post('http://localhost:5000/api/transaction', transaction)
         .then(function (response) {
-            pushVerification(response.data.id)
+            pushVerification(response.data.id,response.data.status)
             //console.log(response.data.id)
         })
         .catch(function (error) {           

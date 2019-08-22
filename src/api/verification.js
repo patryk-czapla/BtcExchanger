@@ -13,7 +13,7 @@ export default {
         }
         axios.put('http://localhost:5000/api/verification', data)
         .then(function (response) {
-            pushSummary(response.data.wallet)
+            pushSummary(response.data.wallet,response.data.status)
             //console.log(response)
         })
         .catch(function (error) {

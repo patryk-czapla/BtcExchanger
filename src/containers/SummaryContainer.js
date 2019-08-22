@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { getId, getAccountNumber, getBTCQuanity, getContactByEmail, getEmail, getPhoneNumber, getWallet} from '../reducers'
+import { getId, getAccountNumber, getBTCQuanity, getContactByEmail, getEmail, getPhoneNumber, getWallet, getStatus } from '../reducers'
 import Summary from '../components/Summary'
 
 const SummaryContainer = ( {
@@ -10,7 +10,8 @@ const SummaryContainer = ( {
         contact_by_email, 
         email,
         phone_number,
-        wallet
+        wallet,
+        status
         } ) => (
         <Summary
             id = {id}
@@ -19,7 +20,8 @@ const SummaryContainer = ( {
             contact_by_email = {contact_by_email}
             email = {email}
             phone_number = {phone_number}
-            wallet= {wallet}
+            wallet = {wallet}
+            status = {status}
         />
     )
 
@@ -31,6 +33,7 @@ const mapStateToProps = (state) => ({
     email: getEmail(state),
     phone_number: getPhoneNumber(state),
     wallet: getWallet(state),
+    status: getStatus(state)
 })
 
 export default connect( 
