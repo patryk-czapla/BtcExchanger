@@ -29,17 +29,34 @@ namespace BtcExchanger.Controllers
             return await _context.TransactionItems.ToListAsync();
         }
 
-        // GET: api/transaction/5
-        [HttpGet("{id}", Name = "GetTransaction")]
-        public async Task<ActionResult<Transaction>> GetTransaction(long id)
+        /// <summary>
+        /// Returns a transaction if provided data is valid.
+        /// </summary>
+        /// <remarks>
+        /// Sample requests:
+        ///
+        ///     GET /transaction/1/1234
+        ///
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <param name="verification_code"></param>
+        /// <returns>Returns a item</returns>
+        /// <response code="201">Returns the item</response>
+        /// <response code="404">If transaction doesn't exist</response>
+        /// <response code="400">If verification_code is incorect</response>
+        [HttpGet("{id}:{verification_code}", Name = "GetTransaction")]
+        public async Task<ActionResult<Transaction>> GetTransaction(long id, string verification_code)
         {
             var transactionItem = await _context.TransactionItems.FindAsync(id);
-
             if (transactionItem == null)
             {
                 return NotFound();
             }
-
+            var verificationItem = await _context.VerificationItems.SingleOrDefaultAsync(b => b.VerificationId == id && b.verification_code == verification_code );
+            if (verificationItem == null)
+            {
+                return BadRequest();
+            }
             return transactionItem;
         }
         
@@ -90,7 +107,7 @@ namespace BtcExchanger.Controllers
             //for deployment
             //generate an email or send an SMS
 
-            return CreatedAtAction(nameof(GetTransaction), new { id = item.Id }, item);
+            return CreatedAtAction(nameof(GetTransaction), new { id = item.Id, verification_code = vitem.verification_code}, item);
         }
 
         private static string RandomString(int length)
