@@ -23,8 +23,8 @@ const useStyles = makeStyles(theme => ({
     }
 
 }))
-function createData(name, value) {
-    return { name, value }
+function createData(row_id, name, value) {
+    return { row_id, name, value }
   }
 const Summary = ({
     id,
@@ -38,12 +38,12 @@ const Summary = ({
     }) => {
     const classes = useStyles()
     const rows = [
-        createData('Order id',  id),
-        createData('Btc Quantity', btc_quantity),
-        createData('Account number', account_number),
-        contact_by_email ? createData('Email', email) : createData('Phone number', phone_number),
-        createData('Wallet', wallet),
-        createData('Status', status)
+        createData('transaction_id', 'Transaction id',  id),
+        createData('btc_quantity', 'Btc Quantity', btc_quantity),
+        createData('account_number', 'Account number', account_number),
+        contact_by_email ? createData('email', 'Email', email) : createData('phone_number', 'Phone number', phone_number),
+        createData('wallet', 'Wallet', wallet),
+        createData('status', 'Status', status)
     ];    
     return (
         <div className="App-content">
@@ -61,7 +61,7 @@ const Summary = ({
                             <TableCell component="th" scope="row">
                                 {row.name}
                             </TableCell>
-                            <TableCell align="right">{row.value}</TableCell>                
+                            <TableCell id={ row.row_id } align="right">{row.value}</TableCell>                
                         </TableRow>
                         ))}
                     </TableBody>
