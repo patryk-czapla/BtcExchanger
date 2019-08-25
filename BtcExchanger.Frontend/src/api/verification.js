@@ -17,8 +17,12 @@ export default {
             //console.log(response)
         })
         .catch(function (error) {
-            getBackWithVerificationError(error.response.data.errors)
-            //console.log(error.response.data.errors)
+            if(error.response != null){
+                getBackWithVerificationError(error.response.data.errors)
+            }else{
+                getBackWithVerificationError({'connection-error':'could not connet with API at ' + process.env.REACT_APP_API_URL})
+                //console.log(error)
+            }
         })
     }   
 }

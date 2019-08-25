@@ -26,9 +26,13 @@ export default {
             pushVerification(response.data.id,response.data.status)
             //console.log(response.data.id)
         })
-        .catch(function (error) {           
-            getBackWithError(error.response.data.errors)
-            //console.log(error)
+        .catch(function (error) {     
+            if(error.response != null){
+                getBackWithError(error.response.data.errors)
+            }else{
+                getBackWithError({'errors':'could not connet with API at ' + process.env.REACT_APP_API_URL})
+                //console.log(error)
+            }
         })
     }, 
 }
