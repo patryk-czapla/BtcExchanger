@@ -77,8 +77,8 @@ const Verification = ( {
                     <Grid container wrap="nowrap" justify="space-between">                                      
                         <Grid item >
                         <ValidationTextField
-                            id="email"
-                            label="verification_code"
+                            id="verification-code"
+                            label="Verification code"
                             value={verification_code}                        
                             className={classes.textField}
                             onChange={(e) => updateVerificationCode(e.target.value)}
