@@ -1,10 +1,40 @@
 # BtcExchanger
 project created for recruitment process  
+# Abstract:
+OOP, Functional programming, C#, JS, Python, Docker, Unit Tests, E2E Tests
+### backend:
+OOP, ASP.Net, C#, webapi, Swagger
+### frontend:
+Functional programming, JS, React, Redux, React Router, Material UI, Thunk
+### Tests:
+C#, Xunit, Python, Selenium
 
-#  Simple commands:
+# Needs:  
+- Download chrome driver for your enviroment and put it in global directory for project as 'chromedriver'.  
+```
+https://sites.google.com/a/chromium.org/chromedriver/downloads
+```
+- If You don't use Chrome Web browser beside downloading driver you also need to edit .env and every selenium tests in line:
+```
+browser = webdriver.Chrome(driver)
+```
+- python Selenium 
+```
+pip install selenium --user
+```
+
+# Simple commands:
+Create .env for selenium tests and docker
+```
+cp .env.example .env  
+```
 Create .env with api path for Frontend  
 ```
 cp ./BtcExchanger.Frontend/.env.example ./BtcExchanger.Frontend/.env  
+```
+Build all docker images:  
+```
+docker-compose build  
 ```
 Run all in docker:  
 ```
@@ -17,6 +47,17 @@ dotnet run --project BtcExchanger
 Run backend tests:  
 ```
 dotnet test  
+```
+Run frontend tests:  
+```
+cd BtcExchanger.Frontend.Tests  
+python Tests_Transaction.py  
+python Tests_Verification.py  
+```
+Run E2E tests:  
+```
+cd E2E.Tests  
+python Tests.py   
 ```
 Run only backend in docker:  
 ```
@@ -31,7 +72,7 @@ npm run
 ```
 Run only frontend in docker:  
 ```
-sudo docker build BtcExchanger.Frontend -t react-docker  
+docker build BtcExchanger.Frontend -t react-docker  
 docker run -p 8000:80 react-docker  
 ```
 
@@ -59,4 +100,3 @@ docker run -p 8000:80 react-docker
   Konteneryzacja rozwiązania  
   Uruchamianie oraz deploy za pomocą jednego polecenia  
   Swagger  
- 
