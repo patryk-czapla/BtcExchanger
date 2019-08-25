@@ -28,14 +28,13 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1),
   },
 }))
-
 const BTCTextField = ({btc_quantity,onChanegeFnc}) => {
   
   const classes = useStyles()
 
   const btcProps = {
-    step:0.0001, 
-    min:0,
+    step: 0.000001, 
+    min: 0.000001,
   }
   
   return (

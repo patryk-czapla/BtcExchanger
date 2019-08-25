@@ -1,7 +1,7 @@
 
 const initialState = {
   id: -1,
-  btc_quantity: 0,
+  btc_quantity: 0.000001,
   account_number: '',
   contact_by_email: true,
   email: '',
