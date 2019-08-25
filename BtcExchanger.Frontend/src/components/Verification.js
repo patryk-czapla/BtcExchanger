@@ -62,7 +62,7 @@ const Verification = ( {
                     <ul className={classes.error_list}>
                     {
                         Object.keys(verification_error_message).map(function(object,i) {
-                            return <li key={i} className={classes.error_message}>{verification_error_message[object]}</li>
+                            return <li id={object+'-error'} key={i} className={classes.error_message}>{verification_error_message[object]}</li>
                         })
                     }
                     </ul>

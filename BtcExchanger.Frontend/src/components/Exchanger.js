@@ -76,7 +76,7 @@ const Exchanger = ({
                     <ul className={classes.error_list}>
                     {
                         Object.keys(error_message).map(function(object,i) {
-                            return <li key={i} className={classes.error_message}>{error_message[object]}</li>
+                            return <li id={object+'-error'} key={i} className={classes.error_message}>{error_message[object]}</li>
                         })
                     }
                     </ul>
