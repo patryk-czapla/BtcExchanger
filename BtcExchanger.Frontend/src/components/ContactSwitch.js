@@ -42,6 +42,7 @@ const AntSwitch = withStyles(theme => ({
 const ContactSwitch = ({onChanegeFnc}) => {   
     return (
         <AntSwitch
+            id="contact-switch"
             onChange={ () => onChanegeFnc() }
         />
     )
