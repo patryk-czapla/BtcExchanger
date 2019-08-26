@@ -82,7 +82,7 @@ namespace BtcExchanger.Controllers
         {
             if ((item.email == null && item.phone_number == null)||(item.email != null && item.phone_number != null))
             {
-                return BadRequest(ErrorHelper.GenerateAnErrorMessage("contact","One contact method should be specified."));
+                return BadRequest(ErrorHelper.GenerateAnErrorMessage("contact","Only one contact method should be specified."));
             }
             if ((item.wallet != null ))
             {

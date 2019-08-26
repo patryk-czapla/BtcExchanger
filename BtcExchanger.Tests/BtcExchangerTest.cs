@@ -129,7 +129,7 @@ namespace BtcExchanger.Tests
             Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
             string responseBody = await response.Content.ReadAsStringAsync();
             JObject json = JObject.Parse(responseBody);
-            Assert.Equal ("One contact method should be specified.", json["errors"]["contact"]);
+            Assert.Equal ("Only one contact method should be specified.", json["errors"]["contact"]);
         }
         [Fact]
         public async Task PostReturnsBadRequestForBothEmailAndPhoneNumberSpecified () {
@@ -139,7 +139,7 @@ namespace BtcExchanger.Tests
             Assert.Equal (HttpStatusCode.BadRequest, response.StatusCode);
             string responseBody = await response.Content.ReadAsStringAsync();
             JObject json = JObject.Parse(responseBody);
-            Assert.Equal ("One contact method should be specified.", json["errors"]["contact"]);
+            Assert.Equal ("Only one contact method should be specified.", json["errors"]["contact"]);
         }
         [Fact]
         public async Task PostReturnsBadRequestForWrongPhoneNumber () {
