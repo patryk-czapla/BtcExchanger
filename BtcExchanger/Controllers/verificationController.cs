@@ -43,14 +43,14 @@ namespace BtcExchanger.Controllers
             var verificationItem = await _context.VerificationItems.SingleOrDefaultAsync(b => b.TransactionId == item.TransactionId);
             if (verificationItem == null)
             {
-                return NotFound(ErrorHelper.GenerateAnErrorMessag("database","There isn't record with specified id in database."));
+                return NotFound(ErrorHelper.GenerateAnErrorMessage("database","There isn't record with specified id in database."));
             }
             if(verificationItem.verification_code != item.verification_code){
-                return BadRequest(ErrorHelper.GenerateAnErrorMessag("verification","Your verification code is invalid."));
+                return BadRequest(ErrorHelper.GenerateAnErrorMessage("verification","Your verification code is invalid."));
             }
             else{
                  if(verificationItem.verified){                    
-                    return BadRequest(ErrorHelper.GenerateAnErrorMessag("verification","Already verified."));
+                    return BadRequest(ErrorHelper.GenerateAnErrorMessage("verification","Already verified."));
                 }
                 verificationItem.verified = true;
 

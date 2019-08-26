@@ -5,7 +5,7 @@ namespace BtcExchanger.Controllers
 {
     public static class ErrorHelper
     {
-        public static dynamic GenerateAnErrorMessag(string errorClass, string errorMessage){
+        public static dynamic GenerateAnErrorMessage(string errorClass, string errorMessage){
                 
             dynamic error_message = new ExpandoObject();
             var dictionary_second = (IDictionary<string, object>)error_message;
